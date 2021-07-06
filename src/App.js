@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 import { useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,6 +12,8 @@ import {
   Jumbotron,
 } from "react-bootstrap";
 import Data from "./data";
+import { Link, Route, Switch } from "react-router-dom";
+import Details from "./Details";
 
 function App() {
   const [shoes, setShoes] = useState(Data);
@@ -23,8 +25,13 @@ function App() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <Nav.Link>
+              <Link to="/">Home</Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link to="/details">Details</Link>
+            </Nav.Link>
+
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
@@ -44,48 +51,46 @@ function App() {
         </Navbar.Collapse>
       </Navbar>
 
-      <Jumbotron className="background">
-        <h1>20% Season off</h1>
-        <p>
-          This is a simple hero unit, a simple jumbotron-style component for
-          calling extra attention to featured content or information.
-        </p>
-        <p>
-          <Button variant="primary">Learn more</Button>
-        </p>
-      </Jumbotron>
+      <Route exact path="/">
+        <Jumbotron className="background">
+          <h1>20% Season off</h1>
+          <p>
+            This is a simple hero unit, a simple jumbotron-style component for
+            calling extra attention to featured content or information.
+          </p>
+          <p>
+            <Button variant="primary">Learn more</Button>
+          </p>
+        </Jumbotron>
 
-      <div className="container">
-        <div className="row">
-          <div className="col-md-4">
-            <img
-              src="https://codingapple1.github.io/shop/shoes1.jpg"
-              width="100%"
-              alt="그림"
-            />
-            <h4>{shoes[0].title}</h4>
-            <p>{shoes[0].content}</p>
-          </div>
-          <div className="col-md-4">
-            <img
-              src="https://codingapple1.github.io/shop/shoes2.jpg"
-              width="100%"
-              alt="그림"
-            />
-            <h4>{shoes[1].title}</h4>
-            <p>{shoes[1].content}</p>
-          </div>
-          <div className="col-md-4">
-            <img
-              src="https://codingapple1.github.io/shop/shoes3.jpg"
-              width="100%"
-              alt="그림"
-            />
-            <h4>{shoes[2].title}</h4>
-            <p>{shoes[2].content}</p>
+        <div className="container">
+          <div className="row">
+            {shoes.map((i, j) => {
+              return <CardItem shoes={shoes[j]} j={j} key={j} />;
+            })}
           </div>
         </div>
-      </div>
+      </Route>
+
+      <Route path="/details">
+        <Details />
+      </Route>
+    </div>
+  );
+}
+
+function CardItem(props) {
+  return (
+    <div className="col-md-4">
+      <img
+        src={
+          "https://codingapple1.github.io/shop/shoes" + (props.j + 1) + ".jpg"
+        }
+        width="100%"
+        alt="그림"
+      />
+      <h4>{props.shoes.title}</h4>
+      <p>{props.shoes.content}</p>
     </div>
   );
 }
